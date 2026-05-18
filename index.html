@@ -91,12 +91,15 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     padding-inline: var(--rail);
     padding-block: 18px;
-    display: flex; align-items: center; justify-content: space-between;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
     pointer-events: none;
     transition: background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
     border-bottom: 1px solid transparent;
   }
   .header > * { pointer-events: auto; }
+  .brand { grid-column: 1; justify-self: start; }
+  .nav { grid-column: 2; justify-self: center; }
+  .header-call { grid-column: 3; justify-self: end; }
   .header.scrolled {
     background: transparent;
     border-bottom-color: transparent;
