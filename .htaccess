@@ -1,4 +1,6 @@
-# Принудительный редирект на HTTPS
+# Принудительный редирект на HTTPS — с учётом прокси хостинга reg.ru
+# Прокси терминирует SSL и передаёт реальный протокол в заголовке X-Forwarded-Proto
 RewriteEngine On
-RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
