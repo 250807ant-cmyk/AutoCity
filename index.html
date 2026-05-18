@@ -1,0 +1,1958 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0e0e10" />
+<title>АвтоСити — сервис уровня дилера для китайских EV в Петербурге</title>
+<meta name="description" content="Премиальный сервис китайских электромобилей и гибридов в Санкт-Петербурге. На треть дешевле дилера. Zeekr, Voyah, Li Auto, Avatr, Lynk & Co, Hongqi, Geely, Denza." />
+<link rel="icon" type="image/svg+xml" href="./Лого.svg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg:        #0e0e10;
+    --bg-soft:   #16161a;
+    --ivory:     #f1ede2;
+    --ivory-ink: #14140e;
+    --ink:       #eae5da;
+    --ink-dim:   #b8b2a6;
+    --ink-mute:  #6f6a60;
+    --ink-low:   rgba(234, 229, 218, 0.14);
+    --ink-vlow:  rgba(234, 229, 218, 0.07);
+    --hi:        #fffaee;
+    --accent:    #df6d03;
+
+    --pad-x:     clamp(16px, 2.4vw, 40px);
+    --max-w:     1720px;
+    --section-py: clamp(96px, 11vw, 168px);
+    --rail:      max(var(--pad-x), calc((100vw - var(--max-w)) / 2 + var(--pad-x)));
+
+    --ease-snap: cubic-bezier(.2,.21,0,1);
+    --ease-soft: cubic-bezier(.22,1,.36,1);
+
+    --font: "Inter Tight", -apple-system, system-ui, "Segoe UI", sans-serif;
+
+    /* Unified heading scale */
+    --h-size:    clamp(40px, 5.6vw, 84px);
+    --h-weight:  300;
+    --h-line:    1.04;
+    --h-spacing: -0.04em;
+
+    /* Unified border radius */
+    --r-card:    10px;
+    --r-pill:    999px;
+    --r-circle:  50%;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--ink); color: var(--bg); }
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- GRID / CONTAINER ---------- */
+  .container {
+    width: 100%;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding-inline: var(--pad-x);
+  }
+  .pad-x { padding-inline: var(--rail); }
+
+  /* ---------- WORD/CHAR animation ---------- */
+  .word { display: inline-block; white-space: nowrap; vertical-align: top; }
+  .char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(60%);
+    transition: opacity .55s var(--ease-snap), transform .65s var(--ease-snap);
+    will-change: opacity, transform;
+  }
+  .char.in { opacity: 1; transform: translateY(0); }
+
+  /* ---------- HEADER ---------- */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding-inline: var(--rail);
+    padding-block: 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    pointer-events: none;
+    transition: background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .header > * { pointer-events: auto; }
+  .header.scrolled {
+    background: transparent;
+    border-bottom-color: transparent;
+  }
+  .brand { display: inline-flex; align-items: center; gap: 11px; font-size: 16px; font-weight: 600; letter-spacing: -0.022em; color: var(--ink); }
+  .brand img { height: 26px; opacity: 0.95; }
+  .nav {
+    display: inline-flex;
+    gap: 2px;
+    padding: 5px;
+    background: rgba(14, 14, 16, 0.55);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+    border: 1px solid var(--ink-low);
+    border-radius: var(--r-pill);
+  }
+  .nav a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-dim);
+    letter-spacing: -0.008em;
+    padding: 8px 16px;
+    border-radius: var(--r-pill);
+    transition: color .3s ease, background .3s ease;
+  }
+  .nav a:hover {
+    color: var(--hi);
+    background: rgba(234, 229, 218, 0.08);
+  }
+  @media (max-width: 880px) { .nav { display: none; } }
+
+  .header-call {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500; color: var(--ink); letter-spacing: -0.008em;
+    padding: 8px 16px;
+    border: 1px solid var(--ink-low);
+    border-radius: var(--r-pill);
+    transition: border-color .3s ease, background .3s ease, color .3s ease;
+  }
+  .header-call::before {
+    content: ""; display: inline-block; width: 7px; height: 7px; border-radius: var(--r-circle); background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .header-call:hover { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+  .header-call:hover::before { background: var(--bg); box-shadow: none; }
+  @media (max-width: 540px) { .header-call .num { display: none; } .header-call::after { content: "Позвонить"; } }
+
+  /* ============================================================
+     HERO — auto-rotating 3-chapter story (no scroll)
+     ============================================================ */
+  .hero-wrap { position: relative; height: 100vh; min-height: 680px; background: var(--bg); }
+  .hero-pin { position: relative; height: 100%; overflow: hidden; }
+
+  .hero-media {
+    position: absolute; inset: 0;
+    overflow: hidden;
+    will-change: border-radius;
+  }
+  .hero-media video,
+  .hero-media .hero-poster {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .hero-media video { filter: brightness(0.65) contrast(1.04) saturate(0.9); }
+  .hero-veil {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(14,14,16,0.55) 0%, rgba(14,14,16,0) 25%, rgba(14,14,16,0) 50%, rgba(14,14,16,0.92) 100%),
+      linear-gradient(90deg, rgba(14,14,16,0.45) 0%, rgba(14,14,16,0) 55%);
+  }
+
+  /* top meta row */
+  .hero-top {
+    position: absolute; top: clamp(96px, 13vh, 132px); left: var(--rail); right: var(--rail);
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 24px; color: var(--ink); z-index: 3;
+  }
+  .hero-top .place,
+  .hero-top .hours {
+    font-size: 13px;
+    letter-spacing: -0.005em;
+    color: var(--ink-dim);
+    font-weight: 400;
+  }
+  .hero-top .hours { text-align: right; }
+
+  /* chapters stack — bottom-left content */
+  .hero-content {
+    position: absolute; left: var(--rail); right: var(--rail);
+    bottom: clamp(140px, 16vh, 200px);
+    z-index: 3;
+  }
+  .hero-chapters {
+    position: relative;
+    display: grid;
+    grid-template-areas: "stack";
+  }
+  .hero-chapter {
+    grid-area: stack;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .55s var(--ease-snap), transform .55s var(--ease-snap);
+    pointer-events: none;
+  }
+  .hero-chapter.in { opacity: 1; transform: none; pointer-events: auto; }
+  .hero-chapter h1 {
+    margin: 0 0 18px;
+    font-size: var(--h-size);
+    font-weight: var(--h-weight);
+    line-height: var(--h-line);
+    letter-spacing: var(--h-spacing);
+    color: var(--hi);
+    max-width: 14ch;
+    padding-bottom: 0.1em;
+  }
+  .hero-chapter h1 em { font-style: normal; font-weight: 500; color: var(--accent); }
+  .hero-chapter p {
+    margin: 0;
+    max-width: 52ch;
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink-dim);
+    letter-spacing: -0.005em;
+  }
+
+  /* footer of hero: cta + progress dots */
+  .hero-foot {
+    position: absolute;
+    left: var(--rail); right: var(--rail); bottom: clamp(36px, 4.5vh, 56px);
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    z-index: 3;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 14px; font-weight: 500; color: var(--ink);
+  }
+  .hero-cta__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px;
+    border: 1px solid var(--ink); border-radius: var(--r-circle);
+    transition: background .3s ease, color .3s ease;
+    font-size: 14px;
+  }
+  .hero-cta:hover .hero-cta__btn { background: var(--ink); color: var(--bg); }
+
+  .hero-dots { display: inline-flex; gap: 14px; align-items: center; }
+  .hero-dot {
+    width: 28px; height: 1px;
+    background: rgba(234,229,218,0.22);
+    overflow: hidden; position: relative;
+  }
+  .hero-dot::after {
+    content: ""; position: absolute; inset: 0;
+    background: var(--ink);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .5s var(--ease-snap);
+  }
+  .hero-dot.done::after { transform: scaleX(1); background: var(--ink); }
+  .hero-dot.active::after { transform: scaleX(var(--p, 0)); background: var(--accent); }
+
+  @media (max-width: 760px) {
+    .hero-content { bottom: 130px; }
+    .hero-foot { bottom: 24px; }
+    .hero-chapter h1 { font-size: clamp(32px, 8.5vw, 56px); }
+    .hero-chapter p { font-size: 13px; }
+  }
+
+  /* ============================================================
+     VALUE HIGHLIGHTS — headline LEFT + slide RIGHT, full-bleed photo below
+     ============================================================ */
+  .vh-wrap { position: relative; height: 340vh; background: var(--bg); }
+  .vh-pin { position: sticky; top: 0; height: 100vh; min-height: 720px; display: flex; flex-direction: column; overflow: hidden; }
+
+  .vh-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(48px, 5vw, 80px);
+    padding-top: clamp(48px, 5vw, 80px);
+    padding-bottom: 0;
+    min-height: 0;
+  }
+
+  .vh-top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 6vw, 80px);
+    padding-inline: var(--rail);
+    align-items: stretch;
+  }
+  @media (min-width: 980px) {
+    .vh-top { grid-template-columns: 1.15fr 1fr; }
+  }
+
+  .vh-head {
+    display: flex; flex-direction: column;
+    gap: clamp(20px, 2vw, 32px);
+  }
+  .vh-eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+  }
+  .vh-title {
+    margin: 0;
+    font-size: var(--h-size);
+    font-weight: var(--h-weight);
+    line-height: var(--h-line);
+    letter-spacing: var(--h-spacing);
+    color: var(--hi);
+  }
+
+  .vh-content {
+    display: flex; flex-direction: column;
+    width: 100%;
+    max-width: 460px;
+    justify-self: start;
+  }
+  .vh-slides {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+  }
+  .vh-slide {
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity .6s var(--ease-snap);
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+  }
+  .vh-slide.in { opacity: 1; }
+  .vh-slide__title {
+    margin: 0;
+    font-size: clamp(22px, 1.9vw, 28px);
+    font-weight: 500; line-height: 1.18;
+    letter-spacing: -0.018em;
+    color: var(--hi);
+  }
+  .vh-slide__body {
+    margin: clamp(18px, 1.6vw, 22px) 0 0;
+    font-size: clamp(14px, 1vw, 15px);
+    line-height: 1.55;
+    color: var(--ink-dim);
+    letter-spacing: -0.005em;
+  }
+  .vh-slide__tags {
+    display: flex; flex-wrap: wrap; gap: 18px;
+    margin-top: clamp(22px, 2.2vw, 32px);
+    padding-top: clamp(20px, 2vw, 28px);
+    border-top: 1px solid var(--ink-low);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .vh-slide__tags span { white-space: nowrap; }
+  .vh-slide__tags span + span::before {
+    content: "·"; margin-right: 18px; opacity: 0.5;
+  }
+
+  .vh-photos {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    max-height: 500px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .vh-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    opacity: 0;
+    transition: opacity .65s var(--ease-snap);
+    will-change: opacity;
+  }
+  .vh-photo.in { opacity: 1; }
+
+  .vh-rail {
+    position: absolute;
+    left: 0; right: 0; bottom: clamp(20px, 2.5vw, 36px);
+    display: flex; gap: 12px;
+    padding-inline: var(--rail);
+    align-items: center;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .vh-rail__seg { flex: 1; height: 1px; background: rgba(234, 229, 218, 0.3); position: relative; overflow: hidden; }
+  .vh-rail__seg-fill { position: absolute; inset: 0; background: var(--hi); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease-snap); }
+  .vh-rail__seg.active .vh-rail__seg-fill,
+  .vh-rail__seg.done .vh-rail__seg-fill { transform: scaleX(1); }
+
+  @media (max-width: 880px) {
+    .vh-wrap { height: 380vh; }
+    .vh-pin { min-height: 0; }
+    .vh-photos { aspect-ratio: 16 / 10; max-height: 38vh; }
+    .vh-content { max-width: 100%; justify-self: stretch; }
+  }
+
+  /* ============================================================
+     SECTION ENTRY — full-bleed image bg + sticky inner panel
+     used for: PROCESS, VALET
+     ============================================================ */
+  .se-wrap {
+    position: relative;
+    height: 140vh;
+    background: var(--bg);
+  }
+  .se-bg { position: absolute; inset: 0; overflow: hidden; }
+  .se-bg img {
+    width: 100%; height: 100%; object-fit: cover;
+    will-change: transform;
+  }
+  .se-bg::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(14,14,16,0.78) 0%, rgba(14,14,16,0.6) 30%, rgba(14,14,16,0.88) 100%);
+  }
+  .se-pin {
+    position: sticky; top: 0;
+    display: flex; align-items: flex-start;
+    padding-inline: var(--rail);
+    padding-top: clamp(80px, 8.5vw, 124px);
+    padding-bottom: clamp(32px, 4vw, 56px);
+  }
+  .se-grid {
+    width: 100%;
+    max-width: var(--max-w); margin: 0 auto;
+    display: grid; grid-template-columns: 1fr; gap: clamp(40px, 6vw, 80px);
+  }
+  @media (min-width: 980px) { .se-grid { grid-template-columns: 1.15fr 1fr; align-items: end; } }
+
+  .se-head .eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+    margin-bottom: 22px;
+  }
+  .se-head h2 {
+    margin: 0 0 24px;
+    font-size: var(--h-size);
+    font-weight: var(--h-weight); line-height: var(--h-line); letter-spacing: var(--h-spacing);
+    color: var(--hi);
+    max-width: 14ch;
+    padding-bottom: 0.1em;
+  }
+  .se-head h2 em { font-style: normal; font-weight: 500; color: var(--ink); }
+  .se-head p {
+    margin: 0;
+    font-size: clamp(15px, 1.2vw, 18px); line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 48ch;
+  }
+  .se-head .arrow-link {
+    margin-top: 32px;
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 500; color: var(--ink);
+    border-bottom: 1px solid var(--ink-low);
+    padding-bottom: 10px;
+    transition: color .3s ease, border-color .3s ease, gap .4s var(--ease-snap);
+  }
+  .se-head .arrow-link::after { content: "→"; }
+  .se-head .arrow-link:hover { color: var(--accent); border-color: var(--accent); gap: 18px; }
+
+  /* captions — number + text rows */
+  .se-captions { display: flex; flex-direction: column; align-self: end; width: 100%; }
+  .se-cap {
+    display: grid; grid-template-columns: 1fr;
+    gap: 8px;
+    padding: clamp(20px, 2vw, 26px) 0;
+    border-top: 1px solid var(--ink-low);
+  }
+  .se-cap:last-child { border-bottom: 1px solid var(--ink-low); }
+  .se-cap__num {
+    font-size: 12px; font-weight: 500;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.005em;
+  }
+  .se-cap__text {
+    font-size: clamp(16px, 1.4vw, 19px); font-weight: 400;
+    color: var(--hi); line-height: 1.4;
+    letter-spacing: -0.014em;
+    margin: 0;
+  }
+
+  /* CTA cluster (for Valet) */
+  .se-actions { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 36px; }
+  .btn-pri, .btn-sec {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 20px;
+    border-radius: var(--r-pill);
+    font-size: 14px; font-weight: 500;
+    transition: background .3s ease, color .3s ease, border-color .3s ease;
+  }
+  .btn-pri { background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
+  .btn-pri:hover { background: var(--accent); border-color: var(--accent); color: var(--hi); }
+  .btn-sec { background: transparent; color: var(--ink); border: 1px solid var(--ink-low); }
+  .btn-sec:hover { border-color: var(--ink); }
+  .btn-pri svg, .btn-sec svg { width: 14px; height: 14px; }
+
+  /* ============================================================
+     SERVICES — editorial typography rows
+     ============================================================ */
+  .services {
+    background: var(--bg);
+    padding-block: clamp(96px, 11vw, 168px);
+  }
+  .services__inner {
+    padding-inline: var(--rail);
+  }
+  .services__head {
+    display: grid; grid-template-columns: 1fr;
+    gap: clamp(20px, 3vw, 40px);
+    align-items: end;
+    margin-bottom: clamp(56px, 7vw, 96px);
+  }
+  @media (min-width: 980px) {
+    .services__head {
+      grid-template-columns: 1.15fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+    }
+  }
+  .services__eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+    display: block; margin-bottom: 16px;
+  }
+  .services__title {
+    margin: 0;
+    font-size: var(--h-size);
+    font-weight: var(--h-weight); line-height: var(--h-line); letter-spacing: var(--h-spacing);
+    color: var(--hi);
+    padding-bottom: 0.1em;
+    max-width: 14ch;
+  }
+  .services__title em { font-style: italic; font-weight: 300; color: var(--accent); }
+  .services__lede {
+    margin: 0;
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 38ch;
+  }
+
+  .services__list {
+    border-top: 1px solid var(--ink-low);
+  }
+  .services__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(8px, 1vw, 16px);
+    padding: clamp(26px, 3vw, 40px) 0;
+    border-bottom: 1px solid var(--ink-low);
+    position: relative;
+  }
+  @media (min-width: 760px) {
+    .services__row {
+      grid-template-columns: 1.15fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: baseline;
+    }
+    .services__row-num {
+      position: absolute;
+      left: 0;
+      top: calc(clamp(26px, 3vw, 40px) + 0.4em);
+    }
+    .services__row-title {
+      padding-left: 56px;
+    }
+  }
+  .services__row-num {
+    font-size: 12px; font-weight: 500; color: var(--ink-mute);
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+  }
+  .services__row-title {
+    margin: 0;
+    font-size: clamp(22px, 2.4vw, 34px);
+    font-weight: 400; line-height: 1.05;
+    letter-spacing: -0.028em;
+    color: var(--hi);
+  }
+  .services__row-items {
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink-dim);
+    letter-spacing: -0.005em;
+  }
+  .services__row-items span {
+    display: inline;
+  }
+  .services__row-items span + span::before {
+    content: " · ";
+    color: var(--ink-mute);
+  }
+  .services__row:hover .services__row-title { color: var(--accent); }
+  .services__row { transition: background .35s ease; }
+  .services__row:hover { background: rgba(223,109,3,0.03); }
+
+  /* ============================================================
+     LIGHT INTERLUDE — ivory contrast block
+     ============================================================ */
+  .ivo {
+    background: var(--bg); color: var(--ink);
+    padding-block: clamp(72px, 8vw, 112px);
+    position: relative;
+    overflow: hidden;
+  }
+  .ivo-inner {
+    padding-inline: var(--rail);
+    position: relative;
+  }
+  .ivo-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 16px; flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--ink-low);
+    margin-bottom: clamp(32px, 4vw, 56px);
+  }
+  .ivo-meta .eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500;
+  }
+  .ivo-meta .tag {
+    font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .ivo-manifesto {
+    margin: 0 0 clamp(36px, 4.5vw, 64px);
+    font-size: var(--h-size);
+    font-weight: var(--h-weight); line-height: var(--h-line); letter-spacing: var(--h-spacing);
+    color: var(--hi);
+    max-width: 18ch;
+    padding-bottom: 0.08em;
+  }
+  .ivo-manifesto em {
+    font-style: italic; font-weight: 300;
+    color: var(--accent);
+  }
+  .ivo-bottom {
+    display: grid; grid-template-columns: 1fr; gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+  @media (min-width: 980px) { .ivo-bottom { grid-template-columns: 1.15fr 1fr; } }
+  .ivo-figure {
+    margin: 0;
+    position: relative;
+  }
+  .ivo-figure img,
+  .ivo-figure__video {
+    width: 100%; aspect-ratio: 21/9; object-fit: cover;
+    border-radius: var(--r-card);
+    background: #1a1a1e;
+    border: 0;
+    display: block;
+  }
+  .ivo-figure__video { pointer-events: none; }
+  .ivo-figure figcaption {
+    margin-top: 10px;
+    font-size: 11px; letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .ivo-body {
+    margin: 0;
+    font-size: clamp(14px, 1.05vw, 17px); line-height: 1.55;
+    color: var(--ink-dim);
+    max-width: 44ch;
+    justify-self: end;
+  }
+
+  /* ============================================================
+     BRANDS — sticky list synced with display
+     ============================================================ */
+  .br-wrap { position: relative; height: 560vh; background: var(--bg); }
+  .br-pin { position: sticky; top: 0; height: 100vh; min-height: 720px; overflow: hidden; display: flex; flex-direction: column; }
+
+  .br-head {
+    padding-inline: var(--rail);
+    padding-top: clamp(120px, 13vw, 180px);
+    padding-bottom: clamp(20px, 2.5vw, 32px);
+    flex-shrink: 0;
+    text-align: center;
+    overflow: hidden;
+    will-change: opacity, transform, max-height, padding;
+  }
+  .br-head h2 {
+    margin: 0 auto;
+    max-width: 22ch;
+    font-size: var(--h-size);
+    font-weight: var(--h-weight); line-height: var(--h-line); letter-spacing: var(--h-spacing);
+    color: var(--hi);
+    padding-bottom: 0.15em;
+  }
+  .br-head h2 em { font-style: normal; font-weight: 400; color: var(--ink); }
+  .br-head .eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 22px;
+    display: block;
+  }
+
+  .br-stage {
+    flex: 1;
+    display: grid; grid-template-columns: 1fr;
+    align-items: stretch;
+    padding-inline: var(--rail);
+    padding-top: clamp(28px, 4vw, 56px);
+    padding-bottom: clamp(20px, 2.5vw, 40px);
+    column-gap: clamp(56px, 8vw, 160px);
+    row-gap: clamp(24px, 4vw, 64px);
+    min-height: 0;
+  }
+  @media (min-width: 980px) {
+    .br-stage { grid-template-columns: minmax(160px, 1fr) 2fr 1fr; align-items: center; }
+  }
+
+  .br-list {
+    display: flex; flex-direction: column;
+    gap: clamp(10px, 1.2vw, 16px);
+    align-self: center;
+    justify-self: end;
+  }
+  .br-item {
+    position: relative;
+    padding-left: clamp(22px, 2vw, 30px);
+    font-size: clamp(18px, 2vw, 30px);
+    font-weight: 400; line-height: 1; letter-spacing: -0.028em;
+    color: rgba(234,229,218,0.32);
+    transition: color .4s var(--ease-snap);
+    background: transparent; border: 0;
+    text-align: left;
+    font-family: inherit;
+    cursor: default;
+  }
+  .br-item::before {
+    content: ""; position: absolute;
+    left: 0; top: 50%;
+    width: 7px; height: 7px; margin-top: -3.5px;
+    border-radius: var(--r-circle); background: var(--accent);
+    opacity: 0; transition: opacity .4s var(--ease-snap);
+    box-shadow: 0 0 14px var(--accent);
+  }
+  .br-item.active { color: var(--ink); }
+  .br-item.active::before { opacity: 1; }
+
+  .br-photos {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--r-card);
+    background: var(--bg-soft);
+    align-self: center;
+    transform-origin: center;
+    will-change: transform;
+  }
+  .br-photo {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity .55s var(--ease-snap);
+  }
+  .br-photo.in { opacity: 1; }
+
+  .br-desc {
+    position: relative;
+    min-height: 120px;
+    align-self: center;
+    justify-self: start;
+    width: clamp(220px, 24vw, 340px);
+  }
+  .br-desc__text {
+    position: absolute; inset: 0;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .5s var(--ease-snap), transform .5s var(--ease-snap);
+    font-size: clamp(14px, 1.05vw, 16px);
+    line-height: 1.55;
+    color: var(--ink-dim);
+    letter-spacing: -0.008em;
+    max-width: 30ch;
+  }
+  .br-desc__text.in { opacity: 1; transform: none; }
+  .br-desc__models {
+    display: block;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink-low);
+    font-size: 12px;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 980px) {
+    .br-wrap { height: 480vh; }
+    .br-desc { display: none; }
+    .br-list { align-self: start; }
+  }
+
+  /* ============================================================
+     CONTACTS — News-style header + 3 cards
+     ============================================================ */
+  .ct {
+    padding-block: var(--section-py);
+    border-top: 1px solid var(--ink-low);
+  }
+  .ct-inner { padding-inline: var(--rail); }
+  .ct-head {
+    display: grid; grid-template-columns: 1fr; gap: clamp(40px, 6vw, 80px);
+    align-items: end;
+    margin-bottom: clamp(48px, 6vw, 88px);
+  }
+  @media (min-width: 980px) { .ct-head { grid-template-columns: 1.15fr 1fr; } }
+  .ct-eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 20px; }
+  .ct-head h2 {
+    margin: 0;
+    font-size: var(--h-size);
+    font-weight: var(--h-weight); line-height: var(--h-line); letter-spacing: var(--h-spacing);
+    color: var(--hi);
+    max-width: 14ch;
+    padding-bottom: 0.1em;
+  }
+  .ct-head h2 em { font-style: normal; font-weight: 500; color: var(--ink); }
+  .ct-head .right {
+    display: flex; flex-direction: column; gap: 14px;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .ct-callback {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 500;
+  }
+  .ct-phone {
+    font-size: clamp(26px, 3vw, 44px);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    color: var(--hi);
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+    transition: color .3s ease;
+    line-height: 1;
+  }
+  .ct-phone:hover { color: var(--accent); }
+  @media (max-width: 879px) {
+    .ct-head .right { align-items: flex-start; text-align: left; }
+  }
+
+  .ct-cards {
+    display: grid; grid-template-columns: 1fr;
+    border-top: 1px solid var(--ink-low);
+  }
+  @media (min-width: 880px) { .ct-cards { grid-template-columns: repeat(3, 1fr); } }
+
+  .ct-card {
+    display: block;
+    padding: clamp(36px, 4vw, 56px) clamp(8px, 1vw, 14px) clamp(36px, 4vw, 56px) 0;
+    border-bottom: 1px solid var(--ink-low);
+    transition: opacity .3s ease;
+    text-decoration: none; color: inherit;
+  }
+  @media (min-width: 880px) {
+    .ct-card { border-bottom: 0; padding-right: clamp(20px, 3vw, 48px); border-right: 1px solid var(--ink-low); }
+    .ct-card + .ct-card { padding-left: clamp(20px, 3vw, 48px); }
+    .ct-card:last-child { border-right: 0; padding-right: 0; }
+  }
+  a.ct-card:hover { opacity: 0.7; }
+  a.ct-card:hover .ct-card__link { color: var(--accent); }
+  .ct-card__eyebrow {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 500; margin-bottom: 28px;
+  }
+  .ct-card__title {
+    font-size: clamp(28px, 3vw, 44px); font-weight: 300;
+    letter-spacing: -0.04em; line-height: 1.0;
+    color: var(--hi); font-variant-numeric: tabular-nums;
+    margin: 0 0 18px;
+  }
+  .ct-card__body { font-size: 14px; line-height: 1.55; color: var(--ink-dim); max-width: 32ch; }
+  .ct-card__link {
+    display: inline-flex; align-items: baseline; gap: 8px;
+    font-size: 13px; font-weight: 500; color: var(--ink);
+    margin-top: 24px;
+    transition: color .3s ease, gap .4s var(--ease-snap);
+  }
+  .ct-card__link::after { content: "→"; }
+
+  /* ============================================================
+     FOOTER — map section
+     ============================================================ */
+  .map-foot {
+    position: relative;
+    background: var(--bg);
+    border-top: 1px solid var(--ink-low);
+  }
+  .map-foot__top {
+    padding: 26px var(--rail) 22px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 24px; flex-wrap: wrap;
+    font-size: 12px; color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  .map-foot__top .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--ink-dim);
+  }
+  .map-foot__top .brand img { height: 20px; opacity: 0.7; }
+  .map-foot__map {
+    position: relative;
+    height: clamp(420px, 60vh, 600px);
+    overflow: hidden;
+    background: #1a1a1e;
+  }
+  .map-foot__map iframe {
+    width: 100%; height: 100%; border: 0; display: block;
+    filter: grayscale(0.9) brightness(0.55) contrast(1.05);
+  }
+  .map-foot__map::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(180deg,
+        var(--bg) 0%,
+        rgba(14,14,16,0.85) 6%,
+        rgba(14,14,16,0.2) 22%,
+        rgba(14,14,16,0.18) 78%,
+        rgba(14,14,16,0.85) 94%,
+        var(--bg) 100%);
+  }
+  .map-foot__open {
+    position: absolute; left: var(--rail); bottom: 24px;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 18px;
+    background: rgba(14,14,16,0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--ink);
+    border: 1px solid var(--ink-low);
+    border-radius: var(--r-pill);
+    font-size: 13px; font-weight: 500;
+    letter-spacing: -0.008em;
+    transition: background .3s ease, color .3s ease, border-color .3s ease;
+    z-index: 2;
+  }
+  .map-foot__open svg { width: 14px; height: 14px; }
+  .map-foot__open:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* ============================================================
+     LOADER — minimal centered wheel + thin progress at bottom edge
+     ============================================================ */
+  body.loading { overflow: hidden; }
+  .loader {
+    position: fixed; inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .7s var(--ease-snap), visibility .7s;
+  }
+  .loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .loader__wheel {
+    width: clamp(140px, 15vw, 200px);
+    height: auto;
+    animation: loader-spin 2.6s cubic-bezier(.4,.05,.2,1) infinite;
+  }
+  .loader__corner {
+    position: absolute;
+    top: clamp(24px, 3vw, 36px);
+    left: clamp(20px, 4vw, 56px);
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 13px; font-weight: 500;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+  }
+  .loader__corner img { height: 24px; width: auto; opacity: 0.92; }
+  .loader__addr {
+    position: absolute;
+    top: clamp(24px, 3vw, 36px);
+    right: clamp(20px, 4vw, 56px);
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .loader__progress {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--ink-low);
+    overflow: hidden;
+  }
+  .loader__progress::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--accent);
+    transform-origin: left;
+    animation: loader-progress 1.4s cubic-bezier(.65,.05,.36,1) infinite;
+  }
+  @keyframes loader-spin { to { transform: rotate(360deg); } }
+  @keyframes loader-progress {
+    0%   { transform: translateX(-100%); }
+    50%  { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* Mobile swipe sliders — hidden on desktop, shown < 980px */
+  .vh-slide__photo, .vh-dots, .br-mobile { display: none; }
+
+  /* ============================================================
+     RESPONSIVE — tablet & mobile adaptation
+     ============================================================ */
+  @media (max-width: 980px) {
+    :root { --section-py: clamp(64px, 12vw, 120px); }
+
+    /* PROCESS / VALET — release sticky pin, normal document flow */
+    .se-wrap { height: auto; }
+    .se-pin {
+      position: relative; z-index: 1;
+      padding-top: clamp(72px, 12vw, 120px);
+      padding-bottom: clamp(72px, 12vw, 120px);
+    }
+
+    /* VALUE HIGHLIGHTS — release pin, horizontal swipe slider */
+    .vh-wrap { height: auto; }
+    .vh-pin {
+      position: static; height: auto; min-height: 0;
+      display: block; overflow: visible;
+    }
+    .vh-stage {
+      display: block;
+      padding: clamp(64px, 12vw, 110px) 0;
+    }
+    .vh-top { display: block; padding-inline: 0; }
+    .vh-head { margin-bottom: clamp(26px, 6vw, 42px); padding-inline: var(--rail); }
+    .vh-content { max-width: 100%; }
+    .vh-slides {
+      position: static; min-height: 0;
+      display: flex; flex-direction: row;
+      align-items: stretch;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-inline: var(--rail);
+      padding-inline: var(--rail);
+      scrollbar-width: none;
+    }
+    .vh-slides::-webkit-scrollbar { display: none; }
+    .vh-slide {
+      position: static; inset: auto; opacity: 1;
+      flex: 0 0 84%;
+      scroll-snap-align: center;
+      justify-content: flex-start;
+    }
+    .vh-slide__photo {
+      display: block;
+      width: 100%; aspect-ratio: 16 / 11;
+      object-fit: cover;
+      border-radius: var(--r-card);
+      margin-bottom: 20px;
+    }
+    .vh-slide__body { display: none; }
+    .vh-slide__tags { margin-top: 18px; }
+    .vh-dots {
+      display: flex; justify-content: center; gap: 9px;
+      margin-top: 26px;
+    }
+    .vh-dot {
+      width: 7px; height: 7px; border-radius: var(--r-circle);
+      background: var(--ink-low); border: 0; padding: 0; cursor: pointer;
+      transition: background .3s ease, transform .3s ease;
+    }
+    .vh-dot.active { background: var(--accent); transform: scale(1.3); }
+    .vh-photos, .vh-rail { display: none; }
+
+    /* BRANDS — release pin, horizontal swipe slider */
+    .br-wrap { height: auto; }
+    .br-pin {
+      position: static; height: auto; min-height: 0;
+      overflow: visible; display: block;
+    }
+    .br-head {
+      padding-top: clamp(64px, 12vw, 104px);
+      padding-bottom: clamp(24px, 5vw, 36px);
+      max-height: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .br-stage { display: none; }
+    .br-mobile { display: block; padding-bottom: clamp(64px, 12vw, 110px); }
+    .brm-track {
+      display: flex; gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-inline: var(--rail);
+      padding-inline: var(--rail);
+      scrollbar-width: none;
+    }
+    .brm-track::-webkit-scrollbar { display: none; }
+    .brm-card {
+      flex: 0 0 84%;
+      scroll-snap-align: center;
+      display: flex; flex-direction: column;
+    }
+    .brm-card__photo {
+      width: 100%; aspect-ratio: 16 / 11;
+      object-fit: cover;
+      border-radius: var(--r-card);
+      background: var(--bg-soft);
+    }
+    .brm-card__name {
+      margin-top: 18px;
+      font-size: clamp(22px, 6vw, 30px);
+      font-weight: 400; letter-spacing: -0.028em;
+      color: var(--hi);
+    }
+    .brm-card__desc {
+      margin: 12px 0 0;
+      font-size: 14px; line-height: 1.55;
+      color: var(--ink-dim);
+    }
+    .brm-card__models {
+      margin-top: 16px; padding-top: 14px;
+      border-top: 1px solid var(--ink-low);
+      font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--ink-mute);
+    }
+    .brm-dots {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 9px;
+      margin-top: 26px; padding-inline: var(--rail);
+    }
+    .brm-dot {
+      width: 7px; height: 7px; border-radius: var(--r-circle);
+      background: var(--ink-low); border: 0; padding: 0; cursor: pointer;
+      transition: background .3s ease, transform .3s ease;
+    }
+    .brm-dot.active { background: var(--accent); transform: scale(1.3); }
+  }
+
+  @media (max-width: 600px) {
+    :root { --h-size: clamp(30px, 8.6vw, 52px); }
+
+    /* HEADER */
+    .header { padding-block: 13px; }
+    .brand { font-size: 15px; }
+    .brand img { height: 23px; }
+
+    /* HERO — centered layout on mobile */
+    .hero-wrap { min-height: 540px; }
+    .hero-top { flex-direction: column; gap: 3px; align-items: center; }
+    .hero-top .place, .hero-top .hours { font-size: 12px; text-align: center; }
+    .hero-content { bottom: clamp(92px, 12vh, 112px); text-align: center; }
+    .hero-chapter h1 { font-size: clamp(30px, 8.8vw, 46px); margin-bottom: 14px; max-width: 100%; }
+    .hero-chapter p { font-size: 13px; max-width: 100%; }
+    .hero-foot { flex-direction: column; align-items: center; gap: 16px; bottom: 20px; }
+
+    /* SERVICES */
+    .services__row { padding: 22px 0; }
+    .services__row-items { font-size: 13px; }
+
+    /* PROCESS / VALET */
+    .se-cap__text { font-size: 16px; }
+    .se-actions { width: 100%; }
+    .btn-pri, .btn-sec { width: 100%; justify-content: center; }
+
+    /* BRANDS */
+    .brm-card { flex: 0 0 86%; }
+    .brm-card__desc { font-size: 13px; }
+
+    /* CONTACTS */
+    .ct-phone { font-size: clamp(26px, 8vw, 38px); }
+
+    /* FOOTER / MAP */
+    .map-foot__map { height: clamp(320px, 56vh, 440px); }
+    .map-foot__open { left: var(--rail); right: var(--rail); justify-content: center; }
+
+    /* LOADER */
+    .loader__addr { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .char { opacity: 1; transform: none; }
+    .loader__wheel { animation: none; }
+  }
+</style>
+</head>
+<body class="loading">
+
+<!-- ================== LOADER ================== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__corner">
+    <img src="./Лого.svg" alt="" />
+    <span>АвтоСити</span>
+  </div>
+  <div class="loader__addr">Санкт-Петербург</div>
+  <img class="loader__wheel" src="./assets/загрузка.png" alt="" />
+  <div class="loader__progress"></div>
+</div>
+
+<!-- ================== HEADER ================== -->
+<header class="header" id="hdr">
+  <a class="brand" href="#top" aria-label="АвтоСити — наверх">
+    <img src="./Лого.svg" alt="" />
+    <span>АвтоСити</span>
+  </a>
+  <nav class="nav" aria-label="Главная навигация">
+    <a href="#value">Подход</a>
+    <a href="#process">Процесс</a>
+    <a href="#brands">Марки</a>
+    <a href="#contact">Контакты</a>
+  </nav>
+  <a class="header-call" href="tel:+79219006776">
+    <span class="num">+7 921 900-67-76</span>
+  </a>
+</header>
+
+<main id="top">
+
+<!-- ================== HERO 3-CHAPTER ================== -->
+<section class="hero-wrap" id="hero">
+  <div class="hero-pin">
+    <div class="hero-media" id="heroMedia">
+      <video id="heroVideo" autoplay muted loop playsinline preload="auto"
+             poster="./assets/ff45aaa6820950c8bed2425339eb00ca.jpg">
+        <source src="./assets/hero.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="hero-veil"></div>
+
+    <div class="hero-top">
+      <div class="place">Санкт-Петербург, Газовая&nbsp;10Г</div>
+      <div class="hours">Ежедневно, 10:00 — 21:00</div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-chapters" aria-live="polite">
+        <article class="hero-chapter in" data-chapter="0">
+          <h1><span data-chars>Сервис уровня</span><br/><span data-chars><em>дилера</em>.</span></h1>
+          <p>Мастерская китайских электромобилей и&nbsp;гибридов в&nbsp;Санкт-Петербурге. Газовая&nbsp;10Г.</p>
+        </article>
+        <article class="hero-chapter" data-chapter="1">
+          <h1><span data-chars>На&nbsp;треть</span><br/><span data-chars><em>дешевле</em>.</span></h1>
+          <p>Та же работа, что в&nbsp;официальном сервисе. Без официальной наценки.</p>
+        </article>
+        <article class="hero-chapter" data-chapter="2">
+          <h1><span data-chars>Запись</span><br/><span data-chars>на&nbsp;<em>завтра</em>.</span></h1>
+          <p>Звоните — забронируем бокс на&nbsp;ближайшее свободное окно.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="hero-foot">
+      <a class="hero-cta" href="tel:+79219006776">
+        <span class="hero-cta__btn" aria-hidden="true">↓</span>
+        <span>Записаться по&nbsp;телефону</span>
+      </a>
+      <div class="hero-dots" aria-hidden="true">
+        <div class="hero-dot active" data-dot="0"></div>
+        <div class="hero-dot" data-dot="1"></div>
+        <div class="hero-dot" data-dot="2"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== SERVICES — editorial typography rows ================== -->
+<section class="services" id="services-list">
+  <div class="services__inner">
+    <div class="services__head">
+      <div>
+        <span class="services__eyebrow" data-chars>Услуги</span>
+        <h2 class="services__title">
+          <span data-chars>Полный</span><br/>
+          <span data-chars><em>спектр</em>.</span>
+        </h2>
+      </div>
+      <p class="services__lede">Восемь направлений в&nbsp;одном цехе — от&nbsp;планового ТО до&nbsp;сложного ремонта высоковольтной системы. Полный список ниже.</p>
+    </div>
+
+    <div class="services__list">
+      <div class="services__row">
+        <div class="services__row-num">01</div>
+        <h3 class="services__row-title">Техническое обслуживание</h3>
+        <div class="services__row-items">
+          <span>Замена масла в&nbsp;редукторах</span><span>Замена масла в&nbsp;моторе</span><span>Замена салонного фильтра</span><span>Замена воздушного фильтра</span><span>Замена охлаждающей жидкости</span><span>Замена антифриза</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">02</div>
+        <h3 class="services__row-title">Ходовая часть</h3>
+        <div class="services__row-items">
+          <span>Любой ремонт ходовой части автомобиля</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">03</div>
+        <h3 class="services__row-title">Двигатель</h3>
+        <div class="services__row-items">
+          <span>Выполнение регламентных работ</span><span>Замена масла</span><span>Замена ГРМ</span><span>Ремонт ДВС</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">04</div>
+        <h3 class="services__row-title">Трансмиссия</h3>
+        <div class="services__row-items">
+          <span>Замена ШРУС</span><span>Ремонт редуктора</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">05</div>
+        <h3 class="services__row-title">Тормозная система</h3>
+        <div class="services__row-items">
+          <span>Замена тормозных колодок</span><span>Замена тормозных дисков</span><span>Установка усиленной тормозной системы</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">06</div>
+        <h3 class="services__row-title">Компьютерная диагностика</h3>
+        <div class="services__row-items">
+          <span>Диагностика оригинальным сканером</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">07</div>
+        <h3 class="services__row-title">Русификация</h3>
+        <div class="services__row-items">
+          <span>Выполнение русификации</span><span>Установка адаптивных приложений</span>
+        </div>
+      </div>
+      <div class="services__row">
+        <div class="services__row-num">08</div>
+        <h3 class="services__row-title">Прочие услуги</h3>
+        <div class="services__row-items">
+          <span>Ремонт генераторов</span><span>Замена термостата</span><span>Замена ламп ближнего света</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== PROCESS — Section Entry ================== -->
+<section class="se-wrap" id="process">
+  <div class="se-bg"><img src="./assets/5042180002d6c0ab155016272088e6a5.jpg" alt="" /></div>
+  <div class="se-pin">
+    <div class="se-grid">
+      <div class="se-head">
+        <div class="eyebrow" data-chars>Процесс</div>
+        <h2>
+          <span data-chars>Прозрачно</span><br/>
+          <span data-chars><em>от&nbsp;звонка</em></span><br/>
+          <span data-chars>до <em>выдачи</em>.</span>
+        </h2>
+        <p>Каждый шаг согласовывается с&nbsp;вами. Никаких «обсудим в&nbsp;процессе» или «нашли ещё одну работу» в&nbsp;момент выдачи.</p>
+        <a class="arrow-link" href="tel:+79219006776">Записаться</a>
+      </div>
+      <div class="se-captions">
+        <div class="se-cap"><div class="se-cap__num">01</div><div class="se-cap__text">Звонок — записываем на&nbsp;ближайшее свободное окно</div></div>
+        <div class="se-cap"><div class="se-cap__num">02</div><div class="se-cap__text">Диагностика на&nbsp;оригинальном софте марки, осмотр на&nbsp;подъёмнике</div></div>
+        <div class="se-cap"><div class="se-cap__num">03</div><div class="se-cap__text">Письменная смета и&nbsp;срок ДО&nbsp;начала работ — в&nbsp;наряд-заказе</div></div>
+        <div class="se-cap"><div class="se-cap__num">04</div><div class="se-cap__text">Видео-отчёт по&nbsp;каждой работе. Машина на&nbsp;мойке, зарядка до&nbsp;80%</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== VALUE HIGHLIGHTS ================== -->
+<section class="vh-wrap" id="value">
+  <div class="vh-pin">
+    <div class="vh-stage">
+      <div class="vh-top">
+        <!-- LEFT: section eyebrow + big headline -->
+        <div class="vh-head">
+          <span class="vh-eyebrow" data-chars>Доказательства</span>
+          <h2 class="vh-title">Три причины,<br/>по&nbsp;которым можно<br/>доверить машину.</h2>
+        </div>
+
+        <!-- RIGHT: slide number + slide title + body + tags -->
+        <div class="vh-content">
+          <div class="vh-slides">
+            <article class="vh-slide in" data-slide="0">
+              <img class="vh-slide__photo" src="./assets/Причина 1.jpg" alt="" />
+              <h3 class="vh-slide__title">Оригинальный диагностический софт каждого бренда.</h3>
+              <p class="vh-slide__body">Тот же программный пакет, который использует официальный дилер. Подключаемся к&nbsp;CAN-шине напрямую — без «китайских клонов».</p>
+              <div class="vh-slide__tags"><span>OEM-софт</span><span>CAN-доступ</span><span>Все марки</span></div>
+            </article>
+            <article class="vh-slide" data-slide="1">
+              <img class="vh-slide__photo" src="./assets/причина 2.jpg" alt="" />
+              <h3 class="vh-slide__title">Сертифицированные мастера производителей.</h3>
+              <p class="vh-slide__body">Каждый мастер прошёл обучение у&nbsp;вендора. Видим конкретную ревизию платформы, а не «китайский кроссовер вообще».</p>
+              <div class="vh-slide__tags"><span>Vendor-trained</span><span>Опыт у&nbsp;дилеров</span><span>Специализация</span></div>
+            </article>
+            <article class="vh-slide" data-slide="2">
+              <img class="vh-slide__photo" src="./assets/причина 3.jpg" alt="" />
+              <h3 class="vh-slide__title">Письменная гарантия 12&nbsp;месяцев на&nbsp;работы и&nbsp;узлы.</h3>
+              <p class="vh-slide__body">Фиксируется в&nbsp;наряд-заказе, без оговорок «при условии эксплуатации по&nbsp;асфальту». Не помог ремонт — переделаем за свой счёт.</p>
+              <div class="vh-slide__tags"><span>12&nbsp;месяцев</span><span>Письменно</span><span>Без оговорок</span></div>
+            </article>
+          </div>
+          <div class="vh-dots" aria-hidden="true">
+            <button class="vh-dot active" data-go="0"></button>
+            <button class="vh-dot" data-go="1"></button>
+            <button class="vh-dot" data-go="2"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FULL-WIDTH PANORAMIC PHOTO (desktop only) -->
+      <div class="vh-photos" aria-hidden="true">
+        <img class="vh-photo in" data-photo="0" src="./assets/Причина 1.jpg" alt="" />
+        <img class="vh-photo" data-photo="1" src="./assets/причина 2.jpg" alt="" />
+        <img class="vh-photo" data-photo="2" src="./assets/причина 3.jpg" alt="" />
+      </div>
+    </div>
+
+    <div class="vh-rail">
+      <div class="vh-rail__seg active"><div class="vh-rail__seg-fill"></div></div>
+      <div class="vh-rail__seg"><div class="vh-rail__seg-fill"></div></div>
+      <div class="vh-rail__seg"><div class="vh-rail__seg-fill"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== INTERLUDE — editorial manifesto ================== -->
+<section class="ivo">
+  <div class="ivo-inner">
+    <div class="ivo-meta">
+      <span class="eyebrow" data-chars>Подход</span>
+      <span class="tag">04 / Узкая специализация</span>
+    </div>
+
+    <h2 class="ivo-manifesto">
+      <span data-chars>Знаем эти</span><br/>
+      <span data-chars>машины <em>наизусть</em>.</span>
+    </h2>
+
+    <div class="ivo-bottom">
+      <figure class="ivo-figure" data-reveal>
+        <video
+          class="ivo-figure__video"
+          autoplay muted loop playsinline preload="auto"
+          poster="./assets/054fbc0250c1abdab635dfb35ad4ec97.jpg">
+          <source src="./assets/Video Project 4.mp4" type="video/mp4" />
+        </video>
+        <figcaption>Возврат клиенту · после кузовного</figcaption>
+      </figure>
+      <p class="ivo-body">
+        Мы&nbsp;не&nbsp;«универсальный сервис» — обслуживаем только восемь марок китайского премиума. Это позволяет накопить узкую экспертизу, которая невозможна, когда в&nbsp;цехе по&nbsp;очереди появляются Mercedes, Toyota и&nbsp;Geely.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== BRANDS ================== -->
+<section class="br-wrap" id="brands">
+  <div class="br-pin">
+    <div class="br-head">
+      <div class="eyebrow" data-chars>Парк</div>
+      <h2>
+        <span data-chars>Восемь марок.</span><br/>
+        <span data-chars><em>И&nbsp;только&nbsp;они.</em></span>
+      </h2>
+    </div>
+
+    <div class="br-stage">
+      <div class="br-list" id="brList">
+        <div class="br-item active" data-brand="0">Zeekr</div>
+        <div class="br-item" data-brand="1">Voyah</div>
+        <div class="br-item" data-brand="2">Li Auto</div>
+        <div class="br-item" data-brand="3">Avatr</div>
+        <div class="br-item" data-brand="4">Lynk &amp; Co</div>
+        <div class="br-item" data-brand="5">Hongqi</div>
+        <div class="br-item" data-brand="6">Geely</div>
+        <div class="br-item" data-brand="7">Denza</div>
+      </div>
+
+      <div class="br-photos" aria-hidden="true">
+        <img class="br-photo in" data-bp="0" src="./assets/Марки/zeekr.jpg" alt="Zeekr" />
+        <img class="br-photo" data-bp="1" src="./assets/Марки/Voyah.png" alt="Voyah" />
+        <img class="br-photo" data-bp="2" src="./assets/Марки/leiasan.jpg" alt="Li Auto" />
+        <img class="br-photo" data-bp="3" src="./assets/Марки/avatr.png" alt="Avatr" />
+        <img class="br-photo" data-bp="4" src="./assets/Марки/lynkco.jpg" alt="Lynk &amp; Co" />
+        <img class="br-photo" data-bp="5" src="./assets/Марки/Hongqi.jpg" alt="Hongqi" />
+        <img class="br-photo" data-bp="6" src="./assets/Марки/geely.jpg" alt="Geely" />
+        <img class="br-photo" data-bp="7" src="./assets/Марки/denza.webp" alt="Denza" />
+      </div>
+
+      <div class="br-desc">
+        <div class="br-desc__text in" data-bd="0">
+          Платформа SEA от&nbsp;Geely Group, батареи CATL. Хорошо изученная электроника и&nbsp;доступные оригинальные мануалы.
+          <span class="br-desc__models">001 · 007 · X · 009</span>
+        </div>
+        <div class="br-desc__text" data-bd="1">
+          Гибридная архитектура Dongfeng. Электроника комфорта сложная — требует оригинального диагностического софта.
+          <span class="br-desc__models">Free · Dreamer · Passion · Courage</span>
+        </div>
+        <div class="br-desc__text" data-bd="2">
+          EREV — гибрид с&nbsp;генератором. Обслуживаем ДВС-генератор, батарею и&nbsp;привод как единую систему.
+          <span class="br-desc__models">L6 · L7 · L8 · L9 · Mega</span>
+        </div>
+        <div class="br-desc__text" data-bd="3">
+          Электроника от&nbsp;Huawei на&nbsp;платформе CHN. Прошивки обновляются часто — следим за&nbsp;актуальностью OTA.
+          <span class="br-desc__models">11 · 12</span>
+        </div>
+        <div class="br-desc__text" data-bd="4">
+          Платформа Geely Group, общая с&nbsp;Volvo. Электроника хорошо документирована, часть запчастей взаимозаменяема.
+          <span class="br-desc__models">01 · 03 · 06 · 08 · 09</span>
+        </div>
+        <div class="br-desc__text" data-bd="5">
+          Премиум-салон с&nbsp;собственной развязкой. Запчасти комфорта приходят дольше — закладываем в&nbsp;срок ремонта.
+          <span class="br-desc__models">EH9 · E-HS9 · HS5</span>
+        </div>
+        <div class="br-desc__text" data-bd="6">
+          База для большинства китайского премиума. Часть запчастей совместима с&nbsp;Volvo и&nbsp;Lotus — экономит время.
+          <span class="br-desc__models">Monjaro · Tugella · Coolray · Atlas</span>
+        </div>
+        <div class="br-desc__text" data-bd="7">
+          Премиум-марка BYD. Батарея Blade и&nbsp;фирменная e-Platform — диагностируем оригинальным софтом BYD.
+          <span class="br-desc__models">D9 · N7 · N8 · Z9</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOBILE swipe slider -->
+    <div class="br-mobile">
+      <div class="brm-track" id="brmTrack">
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/zeekr.jpg" alt="Zeekr" />
+          <div class="brm-card__name">Zeekr</div>
+          <p class="brm-card__desc">Платформа SEA от&nbsp;Geely Group, батареи CATL. Хорошо изученная электроника и&nbsp;доступные оригинальные мануалы.</p>
+          <div class="brm-card__models">001 · 007 · X · 009</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/Voyah.png" alt="Voyah" />
+          <div class="brm-card__name">Voyah</div>
+          <p class="brm-card__desc">Гибридная архитектура Dongfeng. Электроника комфорта сложная — требует оригинального диагностического софта.</p>
+          <div class="brm-card__models">Free · Dreamer · Passion · Courage</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/leiasan.jpg" alt="Li Auto" />
+          <div class="brm-card__name">Li Auto</div>
+          <p class="brm-card__desc">EREV — гибрид с&nbsp;генератором. Обслуживаем ДВС-генератор, батарею и&nbsp;привод как единую систему.</p>
+          <div class="brm-card__models">L6 · L7 · L8 · L9 · Mega</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/avatr.png" alt="Avatr" />
+          <div class="brm-card__name">Avatr</div>
+          <p class="brm-card__desc">Электроника от&nbsp;Huawei на&nbsp;платформе CHN. Прошивки обновляются часто — следим за&nbsp;актуальностью OTA.</p>
+          <div class="brm-card__models">11 · 12</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/lynkco.jpg" alt="Lynk &amp; Co" />
+          <div class="brm-card__name">Lynk &amp; Co</div>
+          <p class="brm-card__desc">Платформа Geely Group, общая с&nbsp;Volvo. Электроника хорошо документирована, часть запчастей взаимозаменяема.</p>
+          <div class="brm-card__models">01 · 03 · 06 · 08 · 09</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/Hongqi.jpg" alt="Hongqi" />
+          <div class="brm-card__name">Hongqi</div>
+          <p class="brm-card__desc">Премиум-салон с&nbsp;собственной развязкой. Запчасти комфорта приходят дольше — закладываем в&nbsp;срок ремонта.</p>
+          <div class="brm-card__models">EH9 · E-HS9 · HS5</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/geely.jpg" alt="Geely" />
+          <div class="brm-card__name">Geely</div>
+          <p class="brm-card__desc">База для большинства китайского премиума. Часть запчастей совместима с&nbsp;Volvo и&nbsp;Lotus — экономит время.</p>
+          <div class="brm-card__models">Monjaro · Tugella · Coolray · Atlas</div>
+        </article>
+        <article class="brm-card">
+          <img class="brm-card__photo" src="./assets/Марки/denza.webp" alt="Denza" />
+          <div class="brm-card__name">Denza</div>
+          <p class="brm-card__desc">Премиум-марка BYD. Батарея Blade и&nbsp;фирменная e-Platform — диагностируем оригинальным софтом BYD.</p>
+          <div class="brm-card__models">D9 · N7 · N8 · Z9</div>
+        </article>
+      </div>
+      <div class="brm-dots" id="brmDots" aria-hidden="true"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================== VALET — Section Entry ================== -->
+<section class="se-wrap" id="valet">
+  <div class="se-bg"><img src="./assets/9cd23d113461059e51ff2b518f7264a6.jpg" alt="" /></div>
+  <div class="se-pin">
+    <div class="se-grid">
+      <div class="se-head">
+        <div class="eyebrow" data-chars>Подача водителя</div>
+        <h2>
+          <span data-chars>Заберём.</span><br/>
+          <span data-chars><em>Вернём.</em></span>
+        </h2>
+        <p>Подача водителя в&nbsp;пределах КАД. Машина уезжает к&nbsp;нам — вы&nbsp;продолжаете заниматься своими делами.</p>
+        <div class="se-actions">
+          <a class="btn-pri" href="tel:+79219006776">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+            Записаться на подачу
+          </a>
+        </div>
+      </div>
+      <div class="se-captions">
+        <div class="se-cap"><div class="se-cap__num">Зона</div><div class="se-cap__text">Санкт-Петербург в&nbsp;пределах КАД</div></div>
+        <div class="se-cap"><div class="se-cap__num">Когда</div><div class="se-cap__text">По&nbsp;согласованию времени — на&nbsp;удобный для&nbsp;вас день</div></div>
+        <div class="se-cap"><div class="se-cap__num">Контакт</div><div class="se-cap__text">Запись только по&nbsp;звонку — детали обсуждаем сразу</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CONTACTS — News-style ================== -->
+<section class="ct" id="contact">
+  <div class="ct-inner">
+    <div class="ct-head">
+      <div>
+        <div class="ct-eyebrow" data-chars>Контакт</div>
+        <h2>
+          <span data-chars>Запишитесь</span><br/>
+          <span data-chars>по&nbsp;<em>телефону</em>.</span>
+        </h2>
+      </div>
+      <div class="right">
+        <span class="ct-callback">Перезвоним за&nbsp;две минуты</span>
+        <a class="ct-phone" href="tel:+79219006776">+7 921 900-67-76</a>
+      </div>
+    </div>
+
+    <div class="ct-cards">
+      <a class="ct-card" href="https://yandex.ru/maps/?ll=30.291434,59.967835&z=17&pt=30.291434,59.967835,pm2rdm" target="_blank" rel="noopener">
+        <div class="ct-card__eyebrow">Адрес</div>
+        <h3 class="ct-card__title">Газовая ул.,<br/>10Г</h3>
+        <div class="ct-card__body">Санкт-Петербург. Въезд со&nbsp;двора, ворота справа от&nbsp;шлагбаума.</div>
+        <span class="ct-card__link">Маршрут</span>
+      </a>
+      <div class="ct-card">
+        <div class="ct-card__eyebrow">Часы работы</div>
+        <h3 class="ct-card__title">10:00<br/>— 21:00</h3>
+        <div class="ct-card__body">Семь дней в&nbsp;неделю. Без выходных и&nbsp;государственных праздников.</div>
+      </div>
+      <a class="ct-card" href="tel:+79219006776">
+        <div class="ct-card__eyebrow">Связь</div>
+        <h3 class="ct-card__title">Только<br/>по&nbsp;звонку</h3>
+        <div class="ct-card__body">Принимаем заявки только по&nbsp;телефону. Перезваниваем за&nbsp;две минуты, если не&nbsp;ответили.</div>
+        <span class="ct-card__link">Позвонить</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="map-foot">
+  <div class="map-foot__top">
+    <div class="brand">
+      <img src="./Лого.svg" alt="" />
+      <span>© 2026 АвтоСити. Санкт-Петербург.</span>
+    </div>
+    <div>Газовая ул., 10Г</div>
+  </div>
+  <div class="map-foot__map">
+    <iframe
+      src="https://yandex.ru/map-widget/v1/?ll=30.291434%2C59.967835&z=16&pt=30.291434%2C59.967835%2Cpm2rdm"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen></iframe>
+  </div>
+  <a class="map-foot__open" href="https://yandex.ru/maps/?ll=30.291434,59.967835&z=17&pt=30.291434,59.967835,pm2rdm" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Открыть в Яндекс Картах
+  </a>
+</footer>
+
+<!-- ================== LIBS ================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+<script>
+  /* LOADER — hide on window load (or after minimum delay) */
+  (function () {
+    const loader = document.getElementById('loader');
+    const MIN_DURATION = 1100; // ms — minimum visible time so the brand moment registers
+    const start = performance.now();
+    function hide() {
+      const elapsed = performance.now() - start;
+      const wait = Math.max(0, MIN_DURATION - elapsed);
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        document.body.classList.remove('loading');
+        // remove from DOM after fade
+        setTimeout(() => loader.remove(), 800);
+      }, wait);
+    }
+    if (document.readyState === 'complete') hide();
+    else window.addEventListener('load', hide);
+    // safety: never block more than 6s
+    setTimeout(hide, 6000);
+  })();
+
+  /* Lenis + GSAP wiring */
+  const lenis = new Lenis({
+    duration: 1.15,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 1.2,
+  });
+  gsap.registerPlugin(ScrollTrigger);
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  /* Char-split: wrap words in inline-block + chars inside */
+  function splitToChars(el) {
+    const text = el.textContent;
+    el.textContent = '';
+    const frag = document.createDocumentFragment();
+    const chars = [];
+    const parts = text.split(/(\s+)/);
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); continue; }
+      const word = document.createElement('span');
+      word.className = 'word';
+      for (const ch of part) {
+        const sp = document.createElement('span');
+        sp.className = 'char'; sp.textContent = ch;
+        word.appendChild(sp); chars.push(sp);
+      }
+      frag.appendChild(word);
+    }
+    el.appendChild(frag);
+    return chars;
+  }
+  document.querySelectorAll('[data-chars]').forEach((el) => {
+    const chars = splitToChars(el);
+    chars.forEach((c, i) => { c.style.transitionDelay = (i * 0.025) + 's'; });
+    ScrollTrigger.create({
+      trigger: el, start: 'top 88%', once: true,
+      onEnter: () => chars.forEach((c) => c.classList.add('in')),
+    });
+  });
+
+  /* Header scrolled state */
+  const hdr = document.getElementById('hdr');
+  ScrollTrigger.create({
+    start: 20, end: 'max',
+    onUpdate: (self) => hdr.classList.toggle('scrolled', self.scroll() > 20),
+  });
+
+  /* HERO: auto-rotating 3 chapters, ~5.5s each, manual dot click also works */
+  const heroVideo = document.getElementById('heroVideo');
+  heroVideo.play().catch(() => {});
+
+  const heroChapters = document.querySelectorAll('.hero-chapter');
+  const heroDots = document.querySelectorAll('.hero-dot');
+  const chapterCount = heroChapters.length;
+  const CHAPTER_DURATION = 5500;
+  let activeChapter = 0;
+  let chapterTimer = null;
+  let chapterProgressStart = performance.now();
+  let chapterRaf = null;
+
+  function setChapter(idx) {
+    if (idx === activeChapter) return;
+    heroChapters[activeChapter]?.classList.remove('in');
+    heroChapters[idx]?.classList.add('in');
+    activeChapter = idx;
+    chapterProgressStart = performance.now();
+    // re-trigger char fade-in
+    heroChapters[idx].querySelectorAll('.char').forEach((c, i) => {
+      c.classList.remove('in');
+      setTimeout(() => c.classList.add('in'), 20 + i * 22);
+    });
+    heroDots.forEach((d, i) => {
+      d.classList.toggle('done', i < idx);
+      d.classList.toggle('active', i === idx);
+      if (i !== idx) d.style.setProperty('--p', '0');
+    });
+  }
+
+  function scheduleNext() {
+    clearTimeout(chapterTimer);
+    chapterTimer = setTimeout(() => {
+      const next = (activeChapter + 1) % chapterCount;
+      setChapter(next);
+      scheduleNext();
+    }, CHAPTER_DURATION);
+  }
+
+  function tickProgress() {
+    const elapsed = performance.now() - chapterProgressStart;
+    const p = Math.min(1, elapsed / CHAPTER_DURATION);
+    const dot = heroDots[activeChapter];
+    if (dot) dot.style.setProperty('--p', String(p));
+    chapterRaf = requestAnimationFrame(tickProgress);
+  }
+  tickProgress();
+  scheduleNext();
+
+  // Manual: click on dot to switch
+  heroDots.forEach((dot, i) => {
+    dot.style.cursor = 'pointer';
+    dot.addEventListener('click', () => {
+      setChapter(i);
+      scheduleNext();
+    });
+  });
+
+  // Pause rotation when hero out of view (saves CPU)
+  const heroIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        if (!chapterTimer) scheduleNext();
+        if (!chapterRaf) tickProgress();
+      } else {
+        clearTimeout(chapterTimer); chapterTimer = null;
+        if (chapterRaf) { cancelAnimationFrame(chapterRaf); chapterRaf = null; }
+      }
+    });
+  }, { threshold: 0 });
+  heroIO.observe(document.querySelector('.hero-wrap'));
+
+  /* VALUE HIGHLIGHTS + BRANDS — desktop scroll-driven; mobile = swipe sliders */
+  const vhWrap = document.querySelector('.vh-wrap');
+  const vhSlides = document.querySelectorAll('.vh-slide');
+  const vhPhotos = document.querySelectorAll('.vh-photo');
+  const vhSegs = document.querySelectorAll('.vh-rail__seg');
+  const vhCount = vhSlides.length;
+
+  const brWrap = document.querySelector('.br-wrap');
+  const brHead = document.querySelector('.br-head');
+  const brPhotos_wrap = document.querySelector('.br-photos');
+  const brItems = document.querySelectorAll('.br-item');
+  const brPhotos = document.querySelectorAll('.br-photo');
+  const brDescs = document.querySelectorAll('.br-desc__text');
+  const brCount = brItems.length;
+
+  /* Scroll-driven cross-fades only exist on desktop (≥981px) */
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 981px)', () => {
+    ScrollTrigger.create({
+      trigger: vhWrap, start: 'top top', end: 'bottom bottom', scrub: 0.3,
+      onUpdate: (self) => {
+        const idx = Math.min(vhCount - 1, Math.floor(self.progress * vhCount));
+        vhSlides.forEach((s, i) => s.classList.toggle('in', i === idx));
+        vhPhotos.forEach((p, i) => p.classList.toggle('in', i === idx));
+        vhSegs.forEach((s, i) => { s.classList.toggle('done', i < idx); s.classList.toggle('active', i === idx); });
+      },
+    });
+    ScrollTrigger.create({
+      trigger: brWrap, start: 'top top', end: 'bottom bottom', scrub: 0.25,
+      onUpdate: (self) => {
+        const p = self.progress;
+        const i = Math.min(brCount - 1, Math.floor(p * brCount));
+        brItems.forEach((it, j) => it.classList.toggle('active', j === i));
+        brPhotos.forEach((ph, j) => ph.classList.toggle('in', j === i));
+        brDescs.forEach((d, j) => d.classList.toggle('in', j === i));
+        const headP = Math.min(1, p / 0.1);
+        const inv = 1 - headP;
+        brHead.style.opacity = String(inv);
+        brHead.style.transform = 'translateY(' + (-headP * 28) + 'px)';
+        brHead.style.maxHeight = (inv * 460) + 'px';
+        brHead.style.paddingTop = (inv * 160) + 'px';
+        brHead.style.paddingBottom = (inv * 28) + 'px';
+        brHead.style.pointerEvents = headP > 0.5 ? 'none' : 'auto';
+        brPhotos_wrap.style.transform = 'scale(' + (1 + headP * 0.12) + ')';
+      },
+    });
+    return () => {
+      brHead.removeAttribute('style');
+      if (brPhotos_wrap) brPhotos_wrap.removeAttribute('style');
+    };
+  });
+
+  /* MOBILE swipe sliders — dot indicators synced with scroll-snap */
+  function setupMobileSlider(track, slides, dots) {
+    if (!track || !slides.length || !dots.length) return;
+    let active = -1, raf = null;
+    function update() {
+      const tr = track.getBoundingClientRect();
+      const center = tr.left + tr.width / 2;
+      let best = 0, bestDist = Infinity;
+      slides.forEach((s, i) => {
+        const r = s.getBoundingClientRect();
+        const d = Math.abs((r.left + r.width / 2) - center);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      if (best !== active) {
+        active = best;
+        dots.forEach((d, i) => d.classList.toggle('active', i === active));
+      }
+    }
+    track.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { raf = null; update(); });
+    }, { passive: true });
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        slides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
+    });
+    update();
+  }
+
+  setupMobileSlider(
+    document.querySelector('.vh-slides'),
+    document.querySelectorAll('.vh-slide'),
+    document.querySelectorAll('.vh-dot')
+  );
+
+  const brmTrack = document.getElementById('brmTrack');
+  const brmDotsBox = document.getElementById('brmDots');
+  if (brmTrack && brmDotsBox) {
+    const brmCards = brmTrack.querySelectorAll('.brm-card');
+    brmCards.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.className = 'brm-dot' + (i === 0 ? ' active' : '');
+      brmDotsBox.appendChild(b);
+    });
+    setupMobileSlider(brmTrack, brmCards, brmDotsBox.querySelectorAll('.brm-dot'));
+  }
+
+  /* Parallax on Section Entry backgrounds (Process, Valet) */
+  document.querySelectorAll('.se-wrap').forEach((wrap) => {
+    const img = wrap.querySelector('.se-bg img');
+    if (!img) return;
+    gsap.fromTo(
+      img,
+      { yPercent: -12, scale: 1.18 },
+      {
+        yPercent: 12,
+        scale: 1.18,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: wrap,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.5,
+        },
+      }
+    );
+  });
+
+  /* Smooth anchors via Lenis */
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+    });
+  });
+</script>
+</body>
+</html>
